@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\Password\PasswordController;
+use App\Http\Controllers\Auth\VerifyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/verify/{token}', [VerifyController::class,'VerifyEmail'])->name('verify');
 
 Route::group(['middleware' => 'jwt.verify'], function($router) {
     Route::post('/refresh',[AuthController::class, 'refresh']);

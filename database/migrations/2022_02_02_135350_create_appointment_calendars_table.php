@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStationsTable extends Migration
+class CreateAppointmentCalendarsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateStationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stations', function (Blueprint $table) {
+        Schema::create('appointment_calendars', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('code');
-            $table->text('qr')->nullable(); //qr kod bununla istasyon tanıtımı vs bilgiler yer alır
-            $table->text('description');
-            $table->decimal('latitude');
-            $table->decimal('longitude');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('station_id')->constrained('stations');
+            $table->date('start_date');
+            $table->date('finish_date');
+            $table->string('start_hour');
+            $table->string('end_hour');
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
@@ -35,6 +34,6 @@ class CreateStationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stations');
+        Schema::dropIfExists('appointment_calendars');
     }
 }

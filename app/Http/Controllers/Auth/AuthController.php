@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\CustomClass\MyResponse;
+use App\Mail\Auth\VerificationEmail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use mysql_xdevapi\Exception;
 
 class AuthController extends Controller
@@ -16,8 +20,9 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:2|max:100',
+            'full_name' => 'required|string|min:2|max:100',
             'email' => 'required|string|email|max:100|unique:users',
+            'username' => 'required|string|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
         ]);
 
@@ -25,11 +30,24 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+
+        if ($request->hasFile('photo')){
+            $photo = $request->photo;
+            $photoName = time().'-'.Str::slug($request->username).'.'.$photo->extension();
+            $photo->move(storage_path('app/public/users'),$photoName);
+            $photo = $photoName;
+            $user['photo'] = $photo;
+        }
+
+        $user = new User();
+        $user['full_name'] = $request->full_name;
+        $user['username'] = $request->username;
+        $user['email'] = $request->email;
+        $user['password'] = Hash::make($request->password);
+        $user['email_verification_token'] = Str::random(32);
+        $user->save();
+
+        Mail::to($user->email)->send(new VerificationEmail($user));
 
         return response()->json([
             'message' => 'User successfully registered',
@@ -44,10 +62,19 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-        ]);
+
+        if ($request->email){
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+                'password' => 'required|string|min:6',
+            ]);
+        }
+        if ($request->username){
+            $validator = Validator::make($request->all(), [
+                'username' => 'required',
+                'password' => 'required|string|min:6',
+            ]);
+        }
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -58,7 +85,7 @@ class AuthController extends Controller
         }
 
         if (\auth()->user()->active == false){
-            return \MyResponse::error('Sorry, you account no active.');
+            return MyResponse::error('Sorry, you account no active');
         }
 
         return $this->respondWithToken($token);
