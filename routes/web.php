@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $user = \App\Models\User::find(1);
+    return view('welcome',compact('user'));
 });
 
-Route::get('mesafe',[OperationController::class,'get_distance_between_points']);

@@ -195,36 +195,6 @@
             -webkit-animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
             animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
         }
-        .text9 {
-            left: 180px;
-            top: 0;
-            -webkit-animation: text-animation8 1s ease-in-out 2.6s 1 normal forwards, text2-animation8 2s ease-in-out 5s 1 normal forwards;
-            animation: text-animation8 1s ease-in-out 2.6s 1 normal forwards, text2-animation8 2s ease-in-out 5s 1 normal forwards;
-        }
-        .text9::after {
-            -webkit-animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
-            animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
-        }
-        .text10 {
-            left: 180px;
-            top: 0;
-            -webkit-animation: text-animation8 1s ease-in-out 2.6s 1 normal forwards, text2-animation8 2s ease-in-out 5s 1 normal forwards;
-            animation: text-animation8 1s ease-in-out 2.6s 1 normal forwards, text2-animation8 2s ease-in-out 5s 1 normal forwards;
-        }
-        .text10::after {
-            -webkit-animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
-            animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
-        }
-        .text11 {
-            left: 180px;
-            top: 0;
-            -webkit-animation: text-animation8 1s ease-in-out 2.6s 1 normal forwards, text2-animation8 2s ease-in-out 5s 1 normal forwards;
-            animation: text-animation8 1s ease-in-out 2.6s 1 normal forwards, text2-animation8 2s ease-in-out 5s 1 normal forwards;
-        }
-        .text11::after {
-            -webkit-animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
-            animation: text-after-animation8 2s ease-in-out 3s 1 normal forwards;
-        }
         @-webkit-keyframes text-animation0 {
             0% {
                 transform: scale(0, 0);
@@ -5480,11 +5450,11 @@
     <div class="text text4">E</div>
     <div class="text text5">L</div>
     <div class="text text6">D</div>
-    <div class="text text7">İ</div>
-    <div class="text text8">N</div>
-    <div class="text text9">İ</div>
-    <div class="text text10">Z</div>
-    <div class="text text11">: )</div>
+    <div class="text text6">İ</div>
+    <div class="text text6">N</div>
+    <div class="text text6">İ</div>
+    <div class="text text6">Z</div>
+    <div class="text text7">: )</div>
     <div class="frame frame0"></div>
     <div class="frame frame1"></div>
     <div class="frame frame2"></div>
@@ -5592,10 +5562,10 @@
 </div>
 
 <script type="text/javascript">
-    setTimeout(()=>{
-        window.open('','_parent','');
-        window.close();
-    },10000)
+ setTimeout(()=>{
+     window.open('','_parent','');
+     window.close();
+ },10000)
 </script>
 </body>
 </html>
