@@ -15,12 +15,13 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users'); // randevu alan kişi
             $table->foreignId('station_id')->constrained('stations');
-            $table->foreignId('user_id')->constrained('users');
             $table->float('price');
             $table->string('price_type')->default('₺');
-            $table->float('rate')->default(0);
+            $table->float('star')->default(0);
             $table->date('date');
+            $table->string('time');
             $table->string('time');
             $table->enum('status', ['planned', 'cancel', 'done']);// planlanıyor - iptal - tamamlandı
             $table->text('reason')->nullable(); // iptal olursa sebebi

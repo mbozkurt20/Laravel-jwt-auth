@@ -18,10 +18,11 @@ class CreateStationsTable extends Migration
             $table->string('name');
             $table->string('image')->nullable();
             $table->string('code');
-            $table->text('qr')->nullable(); //qr kod bununla istasyon tanıtımı vs bilgiler yer alır
+            $table->decimal('star')->default(0);
+            $table->string('phone')->nullable();
+            $table->string('latitude');
+            $table->string('longitude');
             $table->text('description');
-            $table->decimal('latitude');
-            $table->decimal('longitude');
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();

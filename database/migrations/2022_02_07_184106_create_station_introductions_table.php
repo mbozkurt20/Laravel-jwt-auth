@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStationPromotionsTable extends Migration
+class CreateStationIntroductionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateStationPromotionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('station_promotions', function (Blueprint $table) {
+        Schema::create('station_introductions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('station_id')->constrained()->cascadeOnDelete();
+            $table->text('qr')->nullable(); //qr kod bununla istasyon tanıtımı vs bilgiler yer alır
             $table->text('about')->nullable();
             $table->json('images')->nullable();
             $table->timestamps();
@@ -29,6 +30,6 @@ class CreateStationPromotionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('station_promotions');
+        Schema::dropIfExists('station_introductions');
     }
 }

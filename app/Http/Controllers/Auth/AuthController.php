@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\CustomClass\Control;
 use App\CustomClass\MyResponse;
 use App\Mail\Auth\VerificationEmail;
 use Illuminate\Http\Request;
@@ -20,16 +21,27 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string|min:2|max:100',
+            'full_name' => 'required|string|min:4|max:100',
             'email' => 'required|string|email|max:100|unique:users',
-            'username' => 'required|string|max:100|unique:users',
-            'password' => 'required|string|confirmed|min:6',
+            'username' => 'required|string|min:8|max:100|unique:users',
+            'password' => 'required|string|confirmed|min:8',
         ]);
+
+        if ($request->phone != null ){
+            $validator = Validator::make($request->all(), [
+                'phone' => 'numeric|min:11',
+            ]);
+        }
+        if ($request->identity != null ){
+            $validator = Validator::make($request->all(), [
+                'identity' => 'numeric|min:11',
+            ]);
+
+        }
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-
 
         if ($request->hasFile('photo')) {
             $photo = $request->photo;
@@ -39,15 +51,24 @@ class AuthController extends Controller
             $user['photo'] = $photo;
         }
 
+        if (!Control::passwordControl($request->password)){
+            return MyResponse::error('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character',400);
+        }
+
         $user = new User();
         $user['full_name'] = $request->full_name;
         $user['username'] = $request->username;
         $user['email'] = $request->email;
+        $user['status'] = 1;
+        $user['phone'] = $request->phone;
+        $user['identity'] = $request->identity;
         $user['password'] = Hash::make($request->password);
         $user['email_verification_token'] = Str::random(32);
         $user->save();
 
-        Mail::to($user->email)->send(new VerificationEmail($user));
+        $user->attachRole(1);
+
+        //  Mail::to($user->email)->send(new VerificationEmail($user));
 
         return response()->json([
             'message' => 'Your registration has been successfully completed and an account confirmation e-mail has been sent to you',
@@ -55,11 +76,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * login user
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function login(Request $request)
     {
 
@@ -84,7 +101,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        if (\auth()->user()->active == false) {
+        if (\auth()->user()->status == false) {
             return MyResponse::error('Sorry, you account no active');
         }
 
@@ -101,7 +118,7 @@ class AuthController extends Controller
     {
         try {
             auth()->logout();
-            return MyResponse::success('Login Successfully', null, 200);
+            return MyResponse::success('Logout Successfully', null, 200);
         } catch (Exception $e) {
             return MyResponse::error('Sorry, something went wrong', 400);
         }
@@ -124,54 +141,70 @@ class AuthController extends Controller
      */
     public function profile()
     {
-        return MyResponse::result('Profile Information', \auth()->user(), 200);
+        return response()->json([
+            'message' => 'Profile Information',
+            'user' => \auth()->user()
+        ], 200);
     }
 
     public function profileEdit(Request $request)
     {
-
-        if ($request->phone) {
+        try {
+            $user = Auth::user();
             $validator = Validator::make($request->all(), [
-                'phone' => 'numeric'
+                'phone' => 'required|numeric',
+                'identity' => 'required|numeric',
+                'username' => 'required|string',
+                'email' => 'required|email',
             ]);
-        }
-        if ($request->username) {
-            $validator = Validator::make($request->all(), [
-                'username' => 'unique:users|string',
-            ]);
-        }
-        if ($request->email) {
-            $validator = Validator::make($request->all(), [
-                'email' => 'email|unique:users',
-            ]);
-        }
-        if ($validator->fails()) {
-            return MyResponse::error($validator->errors());
+
+            if ($user->email != $request->email){
+                $validator = Validator::make($request->all(), [
+                    'email' => 'unique:users',
+                ]);
+            }
+            if ($user->username != $request->username){
+                $validator = Validator::make($request->all(), [
+                    'username' => 'unique:users',
+                ]);
+            }
+
+            if ($validator->fails()) {
+                return MyResponse::error($validator->errors());
+            }
+
+
+            $user['email'] = $request->email;
+            $user['phone'] = $request->phone;
+            $user['identity'] = $request->identity;
+            $user['username'] = $request->username;
+
+            if ($request->hasFile('photo')) {
+                $photo = $request->photo;
+                $photoName = time() . '-' . Str::slug($request->username) . '.' . $photo->extension();
+                $photo->move(storage_path('app/public/users'), $photoName);
+                $photo = $photoName;
+                $user['photo'] = $photo;
+            }
+
+            $user->update();
+            return response()->json(['message' => 'user update successfully', 'user' => \auth()->user()], 201);
+        }catch (\Exception $e){
+            return response()->json($e,422);
         }
 
-        $user = Auth::user();
-        $user['email'] = $request->email;
-        $user['phone'] = $request->phone;
-        $user['username'] = $request->username;
-
-        if ($request->hasFile('photo')) {
-            $photo = $request->photo;
-            $photoName = time() . '-' . Str::slug($request->username) . '.' . $photo->extension();
-            $photo->move(storage_path('app/public/users'), $photoName);
-            $photo = $photoName;
-            $user['photo'] = $photo;
-        }
-
-        $user->update();
-        return MyResponse::success('user update successfully', $user, 201);
     }
 
     public function passwordUpdate(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'password' => 'required|min:6|string',
-            'new_password' => 'required|string|min:6|confirmed',
+            'password' => 'required|min:8|string',
+            'new_password' => 'required|string|min:8|confirmed',
         ]);
+
+        if (!Control::passwordControl($request->new_password)){
+            return MyResponse::error('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character',400);
+        }
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -181,9 +214,9 @@ class AuthController extends Controller
         if (password_verify($request->password, $user->password)) {
             $user['password'] = Hash::make($request->new_password);
             $user->update();
-            return response()->json(['message' => 'Success password updated'], 200);
+            return MyResponse::success('Success password updated');
         } else {
-            return response()->json(['message' => 'You entered your current password incorrectly'], 400);
+            return MyResponse::error('You entered your current password incorrectly',400);
         }
     }
 

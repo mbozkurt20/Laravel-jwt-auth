@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\Password\PasswordController;
 use App\Http\Controllers\Auth\VerifyController;
+use App\Http\Controllers\Stations\StationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,9 +26,14 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/verify/{token}', [VerifyController::class,'VerifyEmail'])->name('verify');
 
+Route::group(['prefix' => 'station'],function (){
+    Route::get('/list',[StationController::class,'stations']);
+});
+
 Route::group(['middleware' => 'jwt.verify'], function($router) {
     Route::post('/refresh',[AuthController::class, 'refresh']);
     Route::get('/profile', [AuthController::class, 'profile']);
+    Route::post('/profile/edit', [AuthController::class, 'profileEdit']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/password/update', [AuthController::class, 'passwordUpdate']);
 
@@ -36,5 +42,7 @@ Route::group(['middleware' => 'jwt.verify'], function($router) {
         Route::post('/email',[PasswordController::class,'passwordEmail']);
         Route::get('/{token}',[PasswordController::class,'resetPassword']);
     });
+
+
 
 });
