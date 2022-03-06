@@ -10,12 +10,12 @@ class Station extends Model
 {
     use HasFactory,SoftDeletes;
 
-   public function stationCalendar(){ // uygunluk durum içerikleri
-       return $this->hasMany(StationCalendar::class,'station_id');
+   public function deviceCalendar(){ //cihaz uygunluk takvimi
+       return $this->hasMany(StationDeviceCalendar::class,'station_device_id');
    }
 
-    public function calculator(){ // hesaplama içerikleri
-        return $this->hasOne(StationCalculator::class,'station_id');
+    public function devices(){ // cihazlar
+        return $this->hasMany(StationDevice::class,'station_id')->select('id','station_id','code','capacity','kw','price');
     }
 
     public function introduction(){ // tanıtım içerikleri

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\CustomClass\Control;
 use App\CustomClass\MyResponse;
+use App\Events\AuthSaved;
 use App\Mail\Auth\VerificationEmail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -52,7 +53,7 @@ class AuthController extends Controller
         }
 
         if (!Control::passwordControl($request->password)){
-            return MyResponse::error('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character',400);
+            return MyResponse::error('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character',407);
         }
 
         $user = new User();
@@ -66,9 +67,9 @@ class AuthController extends Controller
         $user['email_verification_token'] = Str::random(32);
         $user->save();
 
-        $user->attachRole(1);
+        $user->attachRole($request->roleType);
 
-        //  Mail::to($user->email)->send(new VerificationEmail($user));
+        event(new AuthSaved($user)); // kayıt olan kişiye onay maili gönderilme işlemi
 
         return response()->json([
             'message' => 'Your registration has been successfully completed and an account confirmation e-mail has been sent to you',

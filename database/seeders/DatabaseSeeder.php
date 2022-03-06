@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             RolesTableSeeder::class,
             UsersTableSeeder::class,
             StationSeeder::class,
+            StationCalendarSeeder::class,
+            AppointmentSeeder::class
         ]);
     }
 }

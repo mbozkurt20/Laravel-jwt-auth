@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStationCalendarsTable extends Migration
+class CreateStationDeviceCalendarsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateStationCalendarsTable extends Migration
      */
     public function up()
     {
-        Schema::create('station_calendars', function (Blueprint $table) {
+        Schema::create('station_device_calendars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('station_id')->constrained('stations');
+            $table->foreignId('station_device_id')->references('id')->on('station_devices')->cascadeOnDelete();
             $table->foreignId('author')->constrained('users'); // takvime ekleme yapan kişi
-            $table->date('start_date');
-            $table->date('finish_date');
-            $table->string('start_hour');
-            $table->string('end_hour');
+            $table->string('start_date');
+            $table->string('end_date');
+            $table->string('start_time');
+            $table->string('end_time');
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +34,6 @@ class CreateStationCalendarsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('station_calendars');
+        Schema::dropIfExists('station_device_calendars');
     }
 }

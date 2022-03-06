@@ -3,7 +3,11 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\Password\PasswordController;
 use App\Http\Controllers\Auth\VerifyController;
+use App\Http\Controllers\NoSession\NoSessionController;
+use App\Http\Controllers\Stations\Devices\Calendars\StationDeviceCalendarController;
+use App\Http\Controllers\Stations\Devices\StationDeviceController;
 use App\Http\Controllers\Stations\StationController;
+use App\Http\Controllers\Users\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,13 +28,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/verify/{token}', [VerifyController::class,'VerifyEmail'])->name('verify');
+Route::get('/verify/{token}', [VerifyController::class,'VerifyEmail']);
 
-Route::group(['prefix' => 'station'],function (){
-    Route::get('/list',[StationController::class,'stations']);
-});
+Route::get('stations',[NoSessionController::class,'stations']);
+Route::get('distance/stations',[NoSessionController::class,'stationsByDistance']);
 
-Route::group(['middleware' => 'jwt.verify'], function($router) {
+Route::group(['middleware' => 'jwt.verify'], function() {
     Route::post('/refresh',[AuthController::class, 'refresh']);
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::post('/profile/edit', [AuthController::class, 'profileEdit']);
@@ -43,6 +46,26 @@ Route::group(['middleware' => 'jwt.verify'], function($router) {
         Route::get('/{token}',[PasswordController::class,'resetPassword']);
     });
 
+    // Station Route Group
+    Route::group(['prefix' => 'station', 'middleware' => 'station-owner'],function (){
+        Route::post('/create',[StationController::class,'CreateStation']);
+        Route::get('/list',[StationController::class,'stations']);
 
+        // Station Device Route Group
+        Route::group(['prefix' => 'device'],function (){
+            Route::post('/create',[StationDeviceController::class,'createDevice']);
+            Route::get('/list/{stationId}',[StationDeviceController::class,'devices']);
 
+            // Station Device Calendar Route Group
+            Route::group(['prefix' => 'calendar'],function (){
+                Route::post('/create',[StationDeviceCalendarController::class,'createCalendar']);
+            });
+        });
+    });
+
+    Route::group(['prefix' => 'client'],function (){
+
+    });
 });
+
+

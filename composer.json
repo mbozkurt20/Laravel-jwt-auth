@@ -27,12 +27,20 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/CustomClass/Calculator.php",
+            "app/CustomClass/Map.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/CustomClass/Calculator.php",
+            "app/CustomClass/Map.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [

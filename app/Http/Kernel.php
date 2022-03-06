@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\JwtVerify;
+use App\Http\Middleware\StationOwner;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'role' => \jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyRole::class,
         'permission' => \jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyPermission::class,
         'level' => \jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyLevel::class,
+        'station-owner' => StationOwner::class
     ];
 }

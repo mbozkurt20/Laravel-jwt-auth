@@ -6,15 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateStationsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('stations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('author')->constrained('users');
             $table->string('name');
             $table->string('image')->nullable();
             $table->string('code');

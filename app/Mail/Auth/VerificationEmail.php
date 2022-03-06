@@ -19,7 +19,11 @@ class VerificationEmail extends Mailable
 
     public function build()
     {
-        return $this->view('auth.verifyEmail');
+        return $this
+            ->subject('Araç Rehberi Hesabınızı Doğrulayınız')
+            ->to($this->user->email)
+            ->view('auth.verifyEmail')
+            ->with(['user' => $this->user]);
     }
 }
 

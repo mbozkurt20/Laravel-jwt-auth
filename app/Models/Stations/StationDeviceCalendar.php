@@ -5,7 +5,7 @@ namespace App\Models\Stations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StationCalculator extends Model
+class StationDeviceCalendar extends Model
 {
     use HasFactory;
 
