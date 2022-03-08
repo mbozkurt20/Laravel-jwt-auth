@@ -54,6 +54,8 @@ class StationController extends Controller
         }
 
         $station->save();
+        Log::create('station-create',$station);
+
         return MyResponse::success('Successfully create new station', $station, 201);
     }
 
@@ -80,8 +82,6 @@ class StationController extends Controller
         }
 
         $station = Station::find($stationId);
-        Log::create('station-update',$station);
-
         $station['author'] = Auth::id();
         $station['name'] = $req->name;
         $station['code'] = $station->code;
@@ -98,6 +98,7 @@ class StationController extends Controller
         }
 
         $station->update();
+        Log::create('station-update',$station);
 
         if ($station){
             return MyResponse::success('İstasyon başarıyla güncellendi', $station, 201);
@@ -112,8 +113,6 @@ class StationController extends Controller
         }
 
         $station = Station::find($stationId);
-        Log::create('station-status',$station);
-
         if ($station->status == true){
             $station->status = false;
             $station->update();
@@ -121,6 +120,8 @@ class StationController extends Controller
             $station->status = true;
             $station->update();
         }
+
+        Log::create('station-status',$station);
 
         return MyResponse::success('İstasyon Durumu Güncellendi',$station,200);
     }

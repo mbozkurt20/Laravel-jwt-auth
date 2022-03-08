@@ -6,8 +6,6 @@ use App\CustomClass\Log;
 use App\CustomClass\MyResponse;
 use App\Models\Stations\Station;
 use App\Models\Stations\StationDevice;
-use App\Models\Stations\StationDeviceCalendar;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +16,7 @@ class StationDeviceController extends Controller
     public function devices($stationId){
         $devices = StationDevice::where('status',true)->select('id','station_id','code','capacity','price','kw')->get();
         $stationName = Station::find($stationId)->name;
-        return MyResponse::success($stationName.' istasyonuna ait cihazlar başarıyla listelendi',$devices);
+        return MyResponse::success($stationName.'İstasyonuna ait cihazlar başarıyla listelendi',$devices);
     }
 
     public function createDevice(Request $request)
@@ -51,6 +49,8 @@ class StationDeviceController extends Controller
         $stationDevice['capacity'] = $request->capacity;
         $stationDevice->save();
 
+        Log::create('station-device-create',$stationDevice);
+
         return MyResponse::success('İstasyona ait cihaz başarıyla oluşturuldu', $stationDevice, 201);
     }
 
@@ -76,8 +76,6 @@ class StationDeviceController extends Controller
         $code = substr($station->name, 0, 3) . '-' . 'device-' . rand(1000, 9000);
 
         $stationDevice = StationDevice::find($deviceId);
-        Log::create('station-device-update',$stationDevice);
-
         $stationDevice['author'] = Auth::id();
         $stationDevice['station_id'] = $request->station_id;
         $stationDevice['code'] = $code;
@@ -85,9 +83,9 @@ class StationDeviceController extends Controller
         $stationDevice['minute'] = 1;
         $stationDevice['kw'] = $request->kw;
         $stationDevice['capacity'] = $request->capacity;
-
-
         $stationDevice->update();
+
+        Log::create('station-device-update',$stationDevice);
 
         if ($stationDevice){
             return MyResponse::success('İstasyona ait cihaz başarıyla oluşturuldu', $stationDevice, 201);
