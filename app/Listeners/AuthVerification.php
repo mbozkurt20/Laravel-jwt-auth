@@ -29,6 +29,6 @@ class AuthVerification
      */
     public function handle(AuthSaved $event)
     {
-        Mail::send(new VerificationEmail($this->user));
+        Mail::send(new VerificationEmail($event->user));
     }
 }

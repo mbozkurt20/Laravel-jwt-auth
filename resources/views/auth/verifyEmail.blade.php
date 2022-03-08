@@ -291,7 +291,7 @@
                                                 <table border="0" cellspacing="0" cellpadding="0" width="100%">
                                                     <tr>
                                                         <td style="-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;">
-                                                            <a href="{{ url('verify/',$user->email_verification_token) }}" target="_blank" style="display:inline-block; color: #fff; font-weight: 400; border-left: 15px solid; border-right: 15px solid; border-top: 12px solid; border-bottom: 12px solid; font-size: 17px; text-decoration: none; text-align: center; -webkit-text-size-adjust: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; font-family: 'Helvetica neue', Helvetica, arial, sans-serif; background-color: #7ad108; border-color: #7ad108;"
+                                                            <a href="{{ url('verify',$user->email_verification_token) }}" target="_blank" style="display:inline-block; color: #fff; font-weight: 400; border-left: 15px solid; border-right: 15px solid; border-top: 12px solid; border-bottom: 12px solid; font-size: 17px; text-decoration: none; text-align: center; -webkit-text-size-adjust: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; font-family: 'Helvetica neue', Helvetica, arial, sans-serif; background-color: #7ad108; border-color: #7ad108;"
                                                                class="btn"> <span style="padding-left: 5px; padding-right: 5px;">
                                 Hesabınızı Onaylayın
                             </span>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Stations\Devices;
 
+use App\CustomClass\Log;
 use App\CustomClass\MyResponse;
 use App\Models\Stations\Station;
 use App\Models\Stations\StationDevice;
@@ -51,5 +52,47 @@ class StationDeviceController extends Controller
         $stationDevice->save();
 
         return MyResponse::success('İstasyona ait cihaz başarıyla oluşturuldu', $stationDevice, 201);
+    }
+
+    public function updateDevice(Request $request,$deviceId)
+    {
+        $validator = Validator::make($request->all(), [
+            'station_id' => 'required|numeric',
+            'capacity' => 'numeric|required',
+            'price' => 'required|numeric',
+            'kw' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return MyResponse::error($validator->errors(), 400);
+        }
+
+        $station = Station::find($request->station_id);
+
+        if ($station->author != Auth::id()){
+            return MyResponse::error('Size ait olmayan bir istasyona cihaz ekleyemezsiniz!',401);
+        }
+
+        $code = substr($station->name, 0, 3) . '-' . 'device-' . rand(1000, 9000);
+
+        $stationDevice = StationDevice::find($deviceId);
+        Log::create('station-device-update',$stationDevice);
+
+        $stationDevice['author'] = Auth::id();
+        $stationDevice['station_id'] = $request->station_id;
+        $stationDevice['code'] = $code;
+        $stationDevice['price'] = $request->price;
+        $stationDevice['minute'] = 1;
+        $stationDevice['kw'] = $request->kw;
+        $stationDevice['capacity'] = $request->capacity;
+
+
+        $stationDevice->update();
+
+        if ($stationDevice){
+            return MyResponse::success('İstasyona ait cihaz başarıyla oluşturuldu', $stationDevice, 201);
+        }else{
+            MyResponse::error('İstasyon cihazı güncellemesi yapılamadı',400);
+        }
     }
 }

@@ -30,7 +30,8 @@
         },
         "files": [
             "app/CustomClass/Calculator.php",
-            "app/CustomClass/Map.php"
+            "app/CustomClass/Map.php",
+            "app/CustomClass/Log.php"
         ]
     },
     "autoload-dev": {
@@ -39,7 +40,8 @@
         },
         "files": [
             "app/CustomClass/Calculator.php",
-            "app/CustomClass/Map.php"
+            "app/CustomClass/Map.php",
+            "app/CustomClass/Log.php"
         ]
     },
     "scripts": {

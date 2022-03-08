@@ -48,7 +48,9 @@ Route::group(['middleware' => 'jwt.verify'], function() {
 
     // Station Route Group
     Route::group(['prefix' => 'station', 'middleware' => 'station-owner'],function (){
-        Route::post('/create',[StationController::class,'CreateStation']);
+        Route::post('/create',[StationController::class,'createStation']);
+        Route::post('/update/{stationId}',[StationController::class,'updateStation']);
+        Route::post('/status/{stationId}',[StationController::class,'statusStation']);
         Route::get('/list',[StationController::class,'stations']);
 
         // Station Device Route Group

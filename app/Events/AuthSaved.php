@@ -23,6 +23,7 @@ class AuthSaved
     public function __construct($user)
     {
        $this->user = $user;
+
     }
 
     /**
