@@ -26,9 +26,9 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/verify/{token}', [VerifyController::class,'VerifyEmail']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::get('verify/{token}', [VerifyController::class,'VerifyEmail']);
 
 Route::get('stations',[NoSessionController::class,'stations']);
 Route::get('distance/stations',[NoSessionController::class,'stationsByDistance']);

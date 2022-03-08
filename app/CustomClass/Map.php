@@ -4,7 +4,7 @@ namespace Map;
 
 function distance($lat1, $lat2, $long1, $long2){
 
-    $apikey = 'AIzaSyBGueqy4-beAkRGbDHMigSA_CxxrDLm76s';
+    $apikey = 'AIzaSyAhLZSXugP4YXbtjz3WrOgpdo1GWE2SjNg';
     $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$lat2.",".$long2."&mode=driving&language=pl-PL&key=".$apikey;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -16,6 +16,7 @@ function distance($lat1, $lat2, $long1, $long2){
     curl_close($ch);
 
     $response_a = json_decode($response, true);
+    dd($response_a);
     $dist = $response_a['rows'][0]['elements'][0]['distance']['value'];
     $distInfo = $response_a['rows'][0]['elements'][0]['distance']['text'];
     $time = $response_a['rows'][0]['elements'][0]['duration']['value'];

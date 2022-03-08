@@ -7,10 +7,9 @@ use App\Mail\Auth\VerificationEmail;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class AuthSavedMail
+class AuthVerification
 {
     /**
      * Create the event listener.
@@ -19,7 +18,7 @@ class AuthSavedMail
      */
     public function __construct(User $user)
     {
-       $this->user = $user;
+        $this->user = $user;
     }
 
     /**
@@ -30,6 +29,6 @@ class AuthSavedMail
      */
     public function handle(AuthSaved $event)
     {
-       Mail::send(new VerificationEmail($this->user));
+        Mail::send(new VerificationEmail($this->user));
     }
 }

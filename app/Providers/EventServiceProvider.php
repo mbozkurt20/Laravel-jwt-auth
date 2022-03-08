@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Events\AuthSaved;
-use App\Listeners\AuthSavedMail;
+use App\Listeners\AuthVerification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,7 +22,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         AuthSaved::class => [
-            AuthSavedMail::class
+           AuthVerification::class
         ]
     ];
 

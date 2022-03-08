@@ -21,6 +21,11 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+
+        $user = User::find(14);
+        Mail::send(new VerificationEmail($user));
+        dd('gönderildi');
+
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|min:4|max:100',
             'email' => 'required|string|email|max:100|unique:users',
@@ -60,7 +65,6 @@ class AuthController extends Controller
         $user['full_name'] = $request->full_name;
         $user['username'] = $request->username;
         $user['email'] = $request->email;
-        $user['status'] = 1;
         $user['phone'] = $request->phone;
         $user['identity'] = $request->identity;
         $user['password'] = Hash::make($request->password);

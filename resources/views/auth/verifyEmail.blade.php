@@ -249,7 +249,7 @@
                 <tr>
                     <td width="53%" valign="middle" style="text-align:left; padding:20px 0 10px 0;">
                         <a style="text-decoration: none" href="">
-                            <h4 style="font-family: Algerian" >TOOL GUİDE</h4>
+                            <h4 style="font-family: Algerian" >Araç Rehberi</h4>
                         </a>
                     </td>
                     <td width="66%" valign="middle" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: right; padding-top: 12px; vertical-align: middle;"></td>
