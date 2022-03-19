@@ -3,7 +3,6 @@
 namespace App\CustomClass;
 
 use App\Models\Appointment\Appointment;
-use App\Models\Stations\Station;
 use App\Models\Stations\StationDevice;
 use App\Models\Stations\StationDeviceCalendar;
 

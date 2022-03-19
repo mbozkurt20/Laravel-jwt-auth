@@ -14,5 +14,4 @@ class Log {
         $log->save();
     }
 
-
 }

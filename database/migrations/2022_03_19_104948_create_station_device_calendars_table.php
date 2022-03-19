@@ -15,7 +15,7 @@ class CreateStationDeviceCalendarsTable extends Migration
     {
         Schema::create('station_device_calendars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('station_device_id')->references('id')->on('station_devices')->cascadeOnDelete();
+            $table->foreignId('station_device_id')->constrained('station_devices');
             $table->foreignId('author')->constrained('users'); // takvime ekleme yapan kişi
             $table->string('start_date');
             $table->string('end_date');

@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Stations\Station;
-use App\Observers\StationObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //
     }
 }

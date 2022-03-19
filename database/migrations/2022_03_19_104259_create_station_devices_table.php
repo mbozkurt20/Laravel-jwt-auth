@@ -22,6 +22,7 @@ class CreateStationDevicesTable extends Migration
             $table->tinyInteger('minute')->default(1); // dakikada harcanan enerji KW cinsinden
             $table->tinyInteger('kw')->default(5); // dakikada harcanan enerji KW cinsinden
             $table->float('price'); // dakika ücreti
+            $table->string('energy_type')->nullable(); //
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();

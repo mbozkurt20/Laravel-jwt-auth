@@ -25,25 +25,24 @@ class StationController extends Controller
     {
 
         $validator = Validator::make($req->all(), [
-            'latitude' => 'required',
             'name' => 'required|unique:stations',
-            'longitude' => 'required',
-            'description' => 'required|string'
+            'description' => 'required|string',
+            'latitude' => 'required',
+            'longitude' => 'required'
         ]);
 
         if ($validator->fails()) {
             return MyResponse::error($validator->errors(), 400);
         }
 
-        $code = Str::slug(substr($req->name, 0, 5) . '-' . substr($req->latitude, 0, 3) . '-' . substr($req->longitude, 0, 3)) . rand(1950, 2022);
 
         $station = new Station();
         $station['author'] = Auth::id();
         $station['name'] = $req->name;
-        $station['code'] = $code;
-        $station['phone'] = $req->phone;
+        $station['code'] = \CodeGenerator\Station($req->name);
         $station['latitude'] = $req->latitude;
         $station['longitude'] = $req->longitude;
+        $station['phone'] = $req->phone;
         $station['description'] = $req->description;
 
         if ($req->hasFile('image')) {
@@ -71,10 +70,10 @@ class StationController extends Controller
         }
 
         $validator = Validator::make($req->all(), [
-            'latitude' => 'required',
             'name' => 'required',
+            'description' => 'required|string',
+            'latitude' => 'required',
             'longitude' => 'required',
-            'description' => 'required|string'
         ]);
 
         if ($validator->fails()) {

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Stations\Station;
-use App\Models\Stations\StationCalculator;
 use App\Models\Stations\StationDevice;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
@@ -11,15 +10,6 @@ use Illuminate\Database\Seeder;
 class StationSeeder extends Seeder
 {
 
-    public  function generateRandomString($length = 8) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
 
     public function run()
     {
@@ -40,13 +30,13 @@ class StationSeeder extends Seeder
                 'star' => rand(1,5),
                 'latitude' => $a['lat'],
                 'longitude' => $a['long'],
-                'code' =>  $this->generateRandomString(),
-                'description' => $faker->text]);
+                'code' => \CodeGenerator\Station($a['city']),
+                'description' => $faker->text ]);
 
                  StationDevice::create([
                      'station_id' => $station->id,
                      'author' => 1,
-                     'code' =>  $this->generateRandomString(),
+                     'code' =>  \CodeGenerator\Device($station->id) ,
                      'capacity' => array_random([100,200,300,400,500,600,700,800,900,1000,2000,3000,4000,5000]),
                      'price' => rand(10,80)
             ]);

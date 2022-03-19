@@ -3,11 +3,11 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\Password\PasswordController;
 use App\Http\Controllers\Auth\VerifyController;
+use App\Http\Controllers\Clients\Appointment\AppointmentController;
 use App\Http\Controllers\NoSession\NoSessionController;
 use App\Http\Controllers\Stations\Devices\Calendars\StationDeviceCalendarController;
 use App\Http\Controllers\Stations\Devices\StationDeviceController;
 use App\Http\Controllers\Stations\StationController;
-use App\Http\Controllers\Users\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,8 +55,12 @@ Route::group(['middleware' => 'jwt.verify'], function() {
 
         // Station Device Route Group
         Route::group(['prefix' => 'device'],function (){
-            Route::post('/create',[StationDeviceController::class,'createDevice']);
             Route::get('/list/{stationId}',[StationDeviceController::class,'devices']);
+            Route::post('/create',[StationDeviceController::class,'createDevice']);
+            Route::post('/update/{deviceId}',[StationDeviceController::class,'updateDevice']);
+            Route::post('/status/{deviceId}',[StationDeviceController::class,'statusDevice']);
+            Route::get('/tracking/{deviceId}',[StationDeviceController::class,'trackingDevice']);
+
 
             // Station Device Calendar Route Group
             Route::group(['prefix' => 'calendar'],function (){
@@ -66,7 +70,7 @@ Route::group(['middleware' => 'jwt.verify'], function() {
     });
 
     Route::group(['prefix' => 'client'],function (){
-
+        Route::post('appointment',[AppointmentController::class]);
     });
 });
 

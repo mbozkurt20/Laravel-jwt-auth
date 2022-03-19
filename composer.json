@@ -31,7 +31,9 @@
         "files": [
             "app/CustomClass/Calculator.php",
             "app/CustomClass/Map.php",
-            "app/CustomClass/Log.php"
+            "app/CustomClass/Log.php",
+            "app/CustomClass/CodeGenerator.php",
+            "app/CustomClass/Time.php"
         ]
     },
     "autoload-dev": {
@@ -41,7 +43,9 @@
         "files": [
             "app/CustomClass/Calculator.php",
             "app/CustomClass/Map.php",
-            "app/CustomClass/Log.php"
+            "app/CustomClass/Log.php",
+            "app/CustomClass/CodeGenerator.php",
+            "app/CustomClass/Time.php"
         ]
     },
     "scripts": {
