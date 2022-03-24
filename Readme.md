@@ -1,5 +1,5 @@
 
-- Git bash get project in local: git clone https://github.com/mbozkurt20/Laravel-jwt-auth.git 
+- run this code with terminal: git clone https://github.com/mbozkurt20/Laravel-jwt-auth.git 
 
 - composer update with all package install
 
