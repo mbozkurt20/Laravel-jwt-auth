@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
         $user = User::create([
             'full_name' => 'Mehmet Bozkurt',
             'username' => 'mbozkurt',
-            'email' => 'mehmet.bozkurt@hepdestek.com',
+            'email' => 'mbozkurt020@hotmail.com',
             'password' => Hash::make('123456789'),
             'status' => 1,
             'email_verification_token' => $faker->safeEmail
