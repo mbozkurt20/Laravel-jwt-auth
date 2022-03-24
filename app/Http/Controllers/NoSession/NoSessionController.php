@@ -76,14 +76,17 @@ class NoSessionController extends Controller
 
             $fullOfTimes = [];
             foreach ($deviceAppointmentTime as $kw => $time){
-               array_push($fullOfTimes,$time.'-'.date('H:i',strtotime(Carbon::create($time)->addMinute(deviceTimeCalculator($deviceId,$kw)))));
+                array_push($fullOfTimes,$time.'-'.date('H:i',strtotime(Carbon::create($time)->addMinute(deviceTimeCalculator($deviceId,$kw)))));
             }
+
+            $freeOfTimes = [];
 
             $start = explode(":", $todayCalendar->start_time);
             $finish = explode(":", $todayCalendar->end_time);
 
-           $deviceAppointment = Appointment::where('station_device_id',$deviceId);
+            $deviceAppointment = Appointment::where('station_device_id',$deviceId);
 
+            return MyResponse::success('Cihazın dolu ve boş olduğu zaman aralıkları',['fullOfTimes' => $fullOfTimes]);
 
         } else {
             return response()->json(['success' => false, 'message' => 'Seçilen tarihte bu cihaz için uygunluk bulunamadı'], 400);
