@@ -18,4 +18,8 @@ class StationDevice extends Model
     public function appointments(){
         return $this->hasMany(Appointment::class,'station_device_id');
     }
+
+    public function calendars(){
+        return $this->hasMany(StationDeviceCalendar::class,'station_device_id');
+    }
 }

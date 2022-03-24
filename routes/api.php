@@ -32,6 +32,7 @@ Route::get('verify/{token}', [VerifyController::class,'VerifyEmail']);
 
 Route::get('stations',[NoSessionController::class,'stations']);
 Route::get('distance/stations',[NoSessionController::class,'stationsByDistance']);
+Route::get('device/calendar/status/{deviceId}',[NoSessionController::class,'stationDeviceCalendarStatus']);
 
 Route::group(['middleware' => 'jwt.verify'], function() {
     Route::post('/refresh',[AuthController::class, 'refresh']);
@@ -52,6 +53,7 @@ Route::group(['middleware' => 'jwt.verify'], function() {
         Route::post('/update/{stationId}',[StationController::class,'updateStation']);
         Route::post('/status/{stationId}',[StationController::class,'statusStation']);
         Route::get('/list',[StationController::class,'stations']);
+        Route::get('/tracking/{stationId}',[StationController::class,'trackingDevice']);
 
         // Station Device Route Group
         Route::group(['prefix' => 'device'],function (){
@@ -59,7 +61,6 @@ Route::group(['middleware' => 'jwt.verify'], function() {
             Route::post('/create',[StationDeviceController::class,'createDevice']);
             Route::post('/update/{deviceId}',[StationDeviceController::class,'updateDevice']);
             Route::post('/status/{deviceId}',[StationDeviceController::class,'statusDevice']);
-            Route::get('/tracking/{deviceId}',[StationDeviceController::class,'trackingDevice']);
 
 
             // Station Device Calendar Route Group
@@ -70,7 +71,7 @@ Route::group(['middleware' => 'jwt.verify'], function() {
     });
 
     Route::group(['prefix' => 'client'],function (){
-        Route::post('appointment',[AppointmentController::class]);
+        Route::post('appointment',[AppointmentController::class,'create']);
     });
 });
 

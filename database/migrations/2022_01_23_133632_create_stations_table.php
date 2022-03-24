@@ -19,6 +19,7 @@ class CreateStationsTable extends Migration
             $table->string('phone')->nullable();
             $table->string('latitude');
             $table->string('longitude');
+            $table->text('address');
             $table->text('description');
             $table->boolean('status')->default(true);
             $table->timestamps();

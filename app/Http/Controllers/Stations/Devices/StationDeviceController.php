@@ -131,35 +131,4 @@ class StationDeviceController extends Controller
         return MyResponse::success('Cihaz Durumu Güncellendi',$device,200);
     }
 
-    public function trackingDevice($deviceId){
-
-        if (! StationDevice::where('id',$deviceId)->exists()){
-            return MyResponse::error('Bu kimliğe ait bir cihaz bulunmamaktadır',400);
-        }
-
-        $device = StationDevice::find($deviceId);
-        $authId = Auth::id();
-
-        if (! (Station::where('id',$device->station_id)->where('author',$authId)->exists() || StationDevice::where('id',$deviceId)->where('author',$authId)->exists())){
-            return MyResponse::error('İşlem yapmak istediğiniz cihaz veya cihazın istasyonu size ait görünmüyor!',401);
-        }
-
-        $results = Appointment::where('station_device_id',$deviceId)->orderByDesc('date')->with('userData')->get();
-        $data = [];
-        foreach ($results as $result){
-            $item =   [
-                'userName' => $result->userData->full_name,
-                'time' => timeConvert($result->created_at),
-                'timeBetween' => $result->start_time.'-'.$result->end_time,
-                'status' => $result->status,
-                'deviceDetail' => $results
-            ];
-
-            array_push($data,$item);
-        }
-
-        return MyResponse::success('Cihaza ait müşteri takip bilgileri', $data);
-
-    }
-
 }

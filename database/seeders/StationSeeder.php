@@ -26,17 +26,19 @@ class StationSeeder extends Seeder
             $station = Station::create([
                 'author' => 1,
                 'name' => $a['city'],
-                'image' => $a['img'],
+                'image' => asset('storage/stations/'.$a['img']),
                 'star' => rand(1,5),
                 'latitude' => $a['lat'],
                 'longitude' => $a['long'],
                 'code' => \CodeGenerator\Station($a['city']),
-                'description' => $faker->text ]);
+                'description' => $faker->text ,
+                'address' => $faker->address ,
+            ]);
 
                  StationDevice::create([
                      'station_id' => $station->id,
                      'author' => 1,
-                     'code' =>  \CodeGenerator\Device($station->id) ,
+                     'code' =>  \CodeGenerator\Device($station->id),
                      'capacity' => array_random([100,200,300,400,500,600,700,800,900,1000,2000,3000,4000,5000]),
                      'price' => rand(10,80)
             ]);

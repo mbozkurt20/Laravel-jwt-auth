@@ -54,7 +54,7 @@ class AuthController extends Controller
         }
 
         if (!Control::passwordControl($request->password)){
-            return MyResponse::error('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character',407);
+            return MyResponse::error('Şifre en az 8 karakter uzunluğunda olmalı ve en az bir büyük harf, bir rakam ve bir özel karakter içermelidir.',407);
         }
 
         $user = new User();
@@ -95,11 +95,11 @@ class AuthController extends Controller
         }
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return MyResponse::error($validator->errors(), 400);
         }
 
         if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return MyResponse::error('Bu bilgilere ait bir hesap bulunamamaktadır.',401);
         }
 
         if (\auth()->user()->status == false) {

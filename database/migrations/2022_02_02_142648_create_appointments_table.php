@@ -18,13 +18,13 @@ class CreateAppointmentsTable extends Migration
             $table->foreignId('user_id')->constrained('users'); // randevu alan kişi
             $table->bigInteger('station_device_id')->unsigned();
             $table->date('date');
-            $table->string('start_time');
-            $table->string('end_time');
+            $table->string('time');
+            $table->string('kw');
             $table->float('price');
             $table->string('price_type')->default('₺');
             $table->float('star')->default(0);
             $table->text('comment')->nullable();
-            $table->enum('status', ['planned', 'cancel', 'done']);// planlanıyor - iptal - tamamlandı
+            $table->enum('status', ['buy waiting','planned', 'cancel', 'done']);// ödeme bkliyor - planlanıyor - iptal - tamamlandı
             $table->text('reason')->nullable(); // iptal olursa sebebi
             $table->timestamps();
             $table->softDeletes();

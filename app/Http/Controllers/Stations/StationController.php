@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Stations;
 
 use App\CustomClass\Log;
 use App\CustomClass\MyResponse;
+use App\Models\Appointment\Appointment;
 use App\Models\Stations\Station;
+use App\Models\Stations\StationDevice;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use function DateFormat\timeConvert;
 use function Map\distance;
 
 class StationController extends Controller
@@ -28,7 +32,8 @@ class StationController extends Controller
             'name' => 'required|unique:stations',
             'description' => 'required|string',
             'latitude' => 'required',
-            'longitude' => 'required'
+            'longitude' => 'required',
+            'address' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -44,12 +49,13 @@ class StationController extends Controller
         $station['longitude'] = $req->longitude;
         $station['phone'] = $req->phone;
         $station['description'] = $req->description;
+        $station['address'] = $req->address;
 
         if ($req->hasFile('image')) {
             $image = $req->image;
             $imageName = time() . '-' . Str::slug($req->name) . '.' . $image->extension();
             $image->move(storage_path('app/public/stations/'), $imageName);
-            $station['image'] = $imageName;
+            $station['image'] = asset('storage/stations/'.$imageName);
         }
 
         $station->save();
@@ -74,6 +80,7 @@ class StationController extends Controller
             'description' => 'required|string',
             'latitude' => 'required',
             'longitude' => 'required',
+            'address' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -88,12 +95,13 @@ class StationController extends Controller
         $station['latitude'] = $req->latitude;
         $station['longitude'] = $req->longitude;
         $station['description'] = $req->description;
+        $station['address'] = $req->address;
 
         if ($req->hasFile('image')) {
             $image = $req->image;
             $imageName = time() . '-' . Str::slug($req->name) . '.' . $image->extension();
             $image->move(storage_path('app/public/stations/'), $imageName);
-            $station['image'] = $imageName;
+            $station['image'] =  asset('storage/stations/'.$imageName);
         }
 
         $station->update();
@@ -107,6 +115,7 @@ class StationController extends Controller
     }
 
     public function statusStation($stationId){
+
         if (! Station::where('id',$stationId)->where('author',Auth::id())->exists()){
             return MyResponse::error('Size ait olmayan istasyon için işlem yapamazsınız!',401);
         }
@@ -123,5 +132,40 @@ class StationController extends Controller
         Log::create('station-status',$station);
 
         return MyResponse::success('İstasyon Durumu Güncellendi',$station,200);
+    }
+
+    public function trackingDevice($stationId){
+        $authId = Auth::id();
+        if (! Station::where('id',$stationId)->where('author',$authId)->exists()){
+            return MyResponse::error('Bu istasyon size ait değil.',401);
+        }
+
+        $station = Station::find($stationId);
+        $stationDevicesIds = $station->devices->pluck('id')->toArray();
+        $results = Appointment::whereIn('station_device_id',$stationDevicesIds)->orderByDesc('date')->with('userData')->get();
+
+        $data = [];
+        foreach ($results as $result){
+            $device = StationDevice::find($result->station_device_id);
+            $betweenTime = ceil($result->kw / $device->kw);
+            $startTime = $result->time;
+            $endTime = date('H:i',strtotime(Carbon::create($startTime)->addMinute($betweenTime)));
+            $startTime = date('H:i',strtotime($startTime));
+
+            $item =   [
+                'userName' => $result->userData->full_name,
+                'time' => timeConvert($result->created_at),
+                'timeBetween' => $startTime.'-'.$endTime,
+                'used_kw' => $result->kw,
+                'device_code' => $device->code,
+                'status' => $result->status,
+                'deviceDetail' => $results
+            ];
+
+            array_push($data,$item);
+        }
+
+        return MyResponse::success('İstasyona ait müşteri takip bilgileri', $data);
+
     }
 }
