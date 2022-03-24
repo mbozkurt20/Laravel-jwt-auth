@@ -27,8 +27,8 @@ class UsersTableSeeder extends Seeder
             'status' => 1,
             'email_verification_token' => $faker->safeEmail
         ]);
-        DB::table('role_user')->insert(['role_id' => 1, 'user_id' => $user->id]);
 
+        $user->attachRole(1);
 
         //-------------------------------------------------------------
         for ($i = 0; $i <= 10; $i++) {
@@ -41,7 +41,7 @@ class UsersTableSeeder extends Seeder
             ];
             $user = User::create($data);
 
-            DB::table('role_user')->insert(['role_id' => 2, 'user_id' => $user->id]);
+            $user->attachRole(1);
         }
 
     }
