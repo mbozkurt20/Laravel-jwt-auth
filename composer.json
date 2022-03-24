@@ -29,11 +29,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/CustomClass/Calculator.php",
-            "app/CustomClass/Map.php",
-            "app/CustomClass/Log.php",
-            "app/CustomClass/CodeGenerator.php",
-            "app/CustomClass/Time.php"
+            "app/CustomClass/Log.php"
         ]
     },
     "autoload-dev": {
@@ -41,11 +37,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "app/CustomClass/Calculator.php",
-            "app/CustomClass/Map.php",
-            "app/CustomClass/Log.php",
-            "app/CustomClass/CodeGenerator.php",
-            "app/CustomClass/Time.php"
+            "app/CustomClass/Log.php"
         ]
     },
     "scripts": {
