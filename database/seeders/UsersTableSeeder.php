@@ -18,15 +18,37 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $faker = Factory::create();
+
         $user = User::create([
             'full_name' => 'Mehmet Bozkurt',
             'username' => 'mbozkurt',
-            'email' => 'mbozkurt020@hotmail.com',
+            'email' => 'mehmet.bozkurt@hepdestek.com',
             'password' => Hash::make('123456789'),
             'status' => 1,
             'email_verification_token' => $faker->safeEmail
         ]);
         DB::table('role_user')->insert(['role_id' => 1, 'user_id' => $user->id]);
+
+        $user = User::create([
+            'full_name' => 'İbrahim Halil Ulu',
+            'username' => 'iulu',
+            'email' => 'ibrahim.ulu@hepdestek.com',
+            'password' => Hash::make('123456789'),
+            'status' => 1,
+            'email_verification_token' => $faker->safeEmail
+        ]);
+        DB::table('role_user')->insert(['role_id' => 1, 'user_id' => $user->id]);
+
+        $user = User::create([
+            'full_name' => 'Melike Gümüştekin',
+            'username' => 'mgumustekin',
+            'email' => 'melike.gumustekin@hepdestek.com',
+            'password' => Hash::make('123456789'),
+            'status' => 1,
+            'email_verification_token' => $faker->safeEmail
+        ]);
+        DB::table('role_user')->insert(['role_id' => 1, 'user_id' => $user->id]);
+
 
         //-------------------------------------------------------------
         for ($i = 0; $i <= 10; $i++) {

@@ -19,21 +19,15 @@ class RolesTableSeeder extends Seeder
          */
         $RoleItems = [
             [
-                'name'        => 'Station Owner',
-                'slug'        => 'station-owner',
-                'description' => 'İstasyon Sahibi',
+                'name'        => 'admin',
+                'slug'        => 'admin',
+                'description' => 'Yönetici',
                 'level'       => 1,
             ],
             [
-                'name'        => 'Clients',
-                'slug'        => 'client',
-                'description' => 'Sadece hizmet alan',
-                'level'       => 1,
-            ],
-            [
-                'name'        => 'Service and Clients',
-                'slug'        => 'clientService',
-                'description' => 'Hizmet alan ve hizmet sağlayan',
+                'name'        => 'user',
+                'slug'        => 'user',
+                'description' => 'Kullanıcı',
                 'level'       => 1,
             ],
         ];
